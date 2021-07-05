@@ -1,0 +1,5 @@
+cmake_minimum_required(VERSION 2.8)
+project(aruco_test)
+find_package(aruco REQUIRED )
+add_executable(test test.cpp)
+target_link_libraries(test  aruco)
