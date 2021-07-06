@@ -4,6 +4,32 @@ using namespace std;
 
 //https://docs.google.com/document/d/1QU9KoBtjSM2kF6ITOjQ76xqL7H0TEtXriJX5kwi9Kgc/edit
 
+//Matrice rotation/translation : https://www.fil.univ-lille1.fr/~aubert/m3ds/m3ds_transformation.pdf
+
+
+int main(int argc,char **argv)
+{
+    cv::VideoCapture cap(2);
+   cv::Mat im;
+   aruco::CameraParameters camera;
+   camera.readFromXMLFile(argv[2]);
+   aruco::MarkerDetector Detector;
+   Detector.setDictionary("ARUCO_MIP_36h12");
+   while (true)
+   {
+       cap.read(im);
+        //im=cv::imread(argv[1]);
+        auto markers=Detector.detect(im,camera, 0.048);//0.05 is the marker size
+        for(auto m:markers){
+            aruco::CvDrawingUtils::draw3dAxis(im,m,camera);
+            cout<<"rvec = " << m.Rvec<<"   tvec= "<<m.Tvec<<endl;
+        }
+        cv::imshow("image",im);
+        cv::waitKey(1);
+       
+   }  
+   
+}
 /*int main(int argc,char **argv)
 {
    cv::Mat im=cv::imread(argv[1]);
@@ -51,27 +77,3 @@ using namespace std;
     }
 }*/
 
-int main(int argc,char **argv)
-{
-    cv::VideoCapture cap(2);
-   cv::Mat im;
-   aruco::CameraParameters camera;
-   camera.readFromXMLFile(argv[2]);
-   aruco::MarkerDetector Detector;
-   Detector.setDictionary("ARUCO_MIP_36h12");
-   while (true)
-   {
-       cap.read(im);
-        //im=cv::imread(argv[1]);
-        auto markers=Detector.detect(im,camera, 0.039);//0.05 is the marker size
-        for(auto m:markers){
-            aruco::CvDrawingUtils::draw3dAxis(im,m,camera);
-            cout<<m.Rvec<<" "<<m.Tvec<<endl;
-        }
-        cv::imshow("image",im);
-        cv::waitKey(1);
-       
-   }
-   
-   
-}
